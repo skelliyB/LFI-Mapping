@@ -13,7 +13,38 @@ def main():
     parser.add_argument('-p', '--payload', help="your payload (WHOLE file directory :3 )")
     args = parser.parse_args()
 
+    print(rf''' _                                                                         _ 
+
+|_|_____|_____|_____|_____|_____|_____|_____|_____|_____|_____|_____|_____|_|
+| |                                                                          
+| |                                                                          
+| |                                                                          
+| |Site is [ {args.Url} ]                                                                          
+|_|--------------------------------------------------------------------------                                                                          
+| |                                                                          
+| |                                                                          
+| |Payload is [{args.payload}]                                                                          
+| |--------------------------------------------------------------------------                                                                          
+|_|                                                                          
+| |                                                                          
+| |                                                                          
+| |                                                                          
+| |                                                                          
+|_|                                                                          
+| |                                                                          
+| |                                                                          
+| |                                                                          
+| |_____ _____ _____ _____ _____ _____ _____ _____ _____ _____ _____ _____   
+|_|_____|_____|_____|_____|_____|_____|_____|_____|_____|_____|_____|_____|  
+|_____|_____|_____|_____|_____|    ''')
+
+    
+    avrg_size = []
+
     payloads = []
+
+
+
 
     if args.payload:
         try:
@@ -32,11 +63,22 @@ def main():
             try:
                 responses = requests.get(fullurl, timeout=5)
                 size_byte = len(responses.content)
+                avrg_size.append(size_byte)
+
+                if avrg_size:
+                     avg = sum(avrg_size) / len(avrg_size)
+                     if abs(size_byte - avg) > 50:
+                         print(Fore.LIGHTBLUE_EX + f"{payload} ({size_byte}) looks different! :3")
+                avrg_size.append(size_byte)
+
 
                 if responses.status_code == 200:
                     print( Fore.LIGHTGREEN_EX + f'{payload}, {size_byte}')
                 else:
                     print(Fore.RED + 'couldnt get to the site :(')
+
+                
+
             except:
                 print('ctrl + c stopped fuzzing :3')
                 return
